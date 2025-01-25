@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Food Items</title>
+    <style>
+        /* General reset for margins and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Page background and font styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Header styling */
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #ff7f50;
+        }
+
+        /* Food items grid container */
+        .food-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+            gap: 20px; /* Spacing between cards */
+            padding: 20px;
+        }
+
+        /* Each food item card styling */
+        .food-item {
+            background-color: #fff;
+            border: 2px solid #ddd; /* Border to resemble nav item */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, background-color 0.3s;
+            padding: 20px;
+        }
+
+        /* Hover effect for food items */
+        .food-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            background-color: #ff7f50; /* Background change on hover */
+            color: white;
+        }
+
+        /* Food image styling */
+        .food-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Food title and price styling */
+        .food-item h3 {
+            font-size: 1.6em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .food-item p {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .food-item .price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.2em;
+            color: #888;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 1200px) {
+            .food-container {
+                grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+            }
+        }
+
+        @media (max-width: 800px) {
+            .food-container {
+                grid-template-columns: repeat(2, 1fr); /* 2 items per row */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .food-container {
+                grid-template-columns: 1fr; /* 1 item per row */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Our Delicious Food Items</h1>
+
+    <div class="food-container" th:each="foodItem : ${foodItems}">
+        <div class="food-item" th:onclick="'window.location.href=' + @{'/foodDetails/' + ${foodItem.id}}">
+            <img th:src="@{/v1/api/user/image/{id}(id=${foodItem.id})}" alt="Food Image">
+            <h3 th:text="${foodItem.name}">Food Name</h3>
+            <p th:text="${foodItem.description}">Description</p>
+            <p class="price" th:text="${foodItem.price}">Price</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Delicious Food. All rights reserved.</p>
+    </footer>
+</body>
+</html>

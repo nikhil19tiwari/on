@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Signup !!</h2>
+            <form th:action="@{/v1/api/user/signupUser}" method="post">
+                <!-- Updated the input name to match the User class fields -->
+                <input type="text" name="userName" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <!-- Added a phone field, assuming it's part of the User model -->
+                <input type="text" name="phone" placeholder="Phone Number" required>
+                <button type="submit">Signup</button>
+            </form>
+            <p>Already have an account? <a th:href="@{/v1/api/user/login}" style="color: blue;">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>

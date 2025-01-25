@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-size: 1.2rem;
+        }
+
+        td button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        td button:hover {
+            background-color: #c0392b;
+        }
+
+        #total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            color: #27ae60;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            color: #2980b9;
+            font-size: 1.2rem;
+            margin: 0 10px;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+
+        /* Payment Section Styles */
+        .payment-section {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .payment-section button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .payment-section button:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items"></tbody>
+        </table>
+        <div id="total"></div>
+
+        <!-- Payment Section -->
+        <div class="payment-section">
+            <p>Total: <span id="payment-total"></span></p>
+            <button onclick="processPayment()">Pay</button>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="/v1/api/user/it">Back to Menu</a>
+        <a href="/v1/api/user/home" onclick="clearCart()">Home Page</a>
+    </div>
+
+    <script>
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        const cartItemsContainer = document.getElementById("cart-items");
+        const totalContainer = document.getElementById("total");
+        const paymentTotalContainer = document.getElementById("payment-total");
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = "";
+            let total = 0;
+
+            cartItems.forEach((item, index) => {
+                total += item.price;
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>$${item.price}</td>
+                    <td><button onclick="removeItem(${index})">Remove</button></td>
+                `;
+                cartItemsContainer.appendChild(row);
+            });
+
+            totalContainer.innerHTML = `Total: $${total.toFixed(2)}`;
+            paymentTotalContainer.innerHTML = `$${total.toFixed(2)}`;
+        }
+
+        function removeItem(index) {
+            cartItems.splice(index, 1);
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            renderCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem("cartItems");
+            renderCart();
+        }
+
+        function processPayment() {
+            // Simulating payment success
+            window.location.href = "/v1/api/user/payment"; // Redirect to the success page
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

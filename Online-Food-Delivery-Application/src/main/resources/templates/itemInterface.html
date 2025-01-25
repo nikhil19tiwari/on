@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Items</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .card {
+            width: 18rem;
+            margin: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card h3 {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .card p {
+            text-align: center;
+            padding: 0 10px;
+        }
+        .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d9534f;
+            margin: 10px 0;
+        }
+        .btn {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .add-to-cart {
+            background-color: #5bc0de;
+        }
+        .buy-now {
+            background-color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Delicious Food Items</h1>
+
+        <div class="row" th:if="${foodItems != null}" th:each="foodItem : ${foodItems}">
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <img th:src="@{'/v1/api/user/image/' + ${foodItem.id}}" alt="Food Image">
+                    <h3 th:text="${foodItem.name}"></h3>
+                    <p th:text="${foodItem.description}"></p>
+                    <p class="price" th:text="'₹' + ${foodItem.price}"></p>
+                    <button 
+                        class="btn add-to-cart" 
+                        th:onclick="'addToCart(\\'' + ${foodItem.name} + '\\', \\'\\' + ${foodItem.description} + '\\', ' + ${foodItem.price} + ', 1)'">
+                        Add to Cart
+                    </button>
+                    <button 
+                        class="btn buy-now" 
+                        th:onclick="'buyNow(\\'' + ${foodItem.name} + '\\', \\'\\' + ${foodItem.description} + '\\', ' + ${foodItem.price} + ')'">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

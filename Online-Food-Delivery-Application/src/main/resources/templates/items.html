@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delicious Food Menu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .food-item {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .food-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .food-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .food-item-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .food-item h2 {
+            font-size: 1.5rem;
+            color: #34495e;
+        }
+
+        .food-item p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .food-item .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0;
+        }
+
+        .food-item button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .food-item button:hover {
+            background-color: #1e8449;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #2980b9;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+		.go-to-cart {
+		        display: inline-block;
+		        background-color: #27ae60;
+		        color: white;
+		        font-size: 1.2rem;
+		        padding: 12px 20px;
+		        border-radius: 30px;
+		        text-decoration: none;
+		        text-align: center;
+		        transition: background-color 0.3s ease, transform 0.3s ease;
+		    }
+
+
+
+    </style>
+</head>
+<body>
+    <h1>Delicious Food Menu</h1>
+    <div class="container" id="menu-container"></div>
+
+   <a href="/v1/api/user/car" class="go-to-cart">Go to Cart</a>
+
+    <script>
+        // Menu data with 100 items (I am using a pattern for simplicity)
+        const foodItems = [
+            { name: "Pizza", desc: "Cheese pizza with fresh toppings", price: 10, img: "/images/ff.jpg" },
+            { name: "Burger", desc: "Juicy beef burger with lettuce", price: 8, img: "images/burger1.jpg" },
+            { name: "Pasta", desc: "Creamy Alfredo pasta", price: 12, img: "images/pasta1.jpg" },
+            { name: "Tacos", desc: "Mexican tacos with chicken", price: 7, img: "images/tacos1.jpg" },
+            { name: "Sushi", desc: "Fresh sushi rolls", price: 15, img: "images/sushi1.jpg" },
+            { name: "Ice Cream", desc: "Vanilla ice cream", price: 5, img: "images/icecream1.jpg" },
+            { name: "Salad", desc: "Fresh garden salad", price: 6, img: "images/salad1.jpg" },
+            { name: "Steak", desc: "Grilled steak with veggies", price: 20, img: "images/steak1.jpg" },
+            { name: "Chicken Wings", desc: "Spicy chicken wings", price: 9, img: "images/wings1.jpg" },
+            { name: "Fries", desc: "Crispy French fries", price: 4, img: "images/fries1.jpg" },
+            { name: "Hot Dog", desc: "Classic hot dog with ketchup", price: 6, img: "images/hotdog1.jpg" },
+            { name: "Lasagna", desc: "Layered meat lasagna", price: 13, img: "images/lasagna1.jpg" },
+            { name: "Cheeseburger", desc: "Burger with cheese and lettuce", price: 10, img: "images/cheeseburger1.jpg" },
+            { name: "Gyros", desc: "Greek gyros with tzatziki", price: 11, img: "images/gyros1.jpg" },
+            { name: "Falafel", desc: "Vegetarian falafel balls", price: 7, img: "images/falafel1.jpg" },
+            { name: "Burrito", desc: "Mexican burrito with beef", price: 8, img: "images/burrito1.jpg" },
+            { name: "Curry", desc: "Spicy chicken curry", price: 12, img: "images/curry1.jpg" },
+            { name: "Ramen", desc: "Japanese ramen with pork", price: 14, img: "images/ramen1.jpg" },
+            { name: "Paella", desc: "Seafood paella with rice", price: 18, img: "images/paella1.jpg" },
+            { name: "Crepes", desc: "Sweet crepes with Nutella", price: 6, img: "images/crepes1.jpg" },
+            { name: "Waffles", desc: "Belgian waffles with syrup", price: 8, img: "images/waffles1.jpg" },
+            { name: "Pancakes", desc: "Fluffy pancakes with maple syrup", price: 7, img: "images/pancakes1.jpg" },
+            { name: "Smoothie", desc: "Fresh fruit smoothie", price: 5, img: "images/smoothie1.jpg" },
+            { name: "Quiche", desc: "Savory quiche with spinach", price: 9, img: "images/quiche1.jpg" },
+            { name: "Sandwich", desc: "Chicken sandwich with mayo", price: 7, img: "images/sandwich1.jpg" },
+            { name: "Bagel", desc: "Bagel with cream cheese", price: 4, img: "images/bagel1.jpg" },
+            { name: "Shawarma", desc: "Middle Eastern shawarma with lamb", price: 12, img: "images/shawarma1.jpg" },
+            { name: "Nachos", desc: "Crispy nachos with cheese", price: 6, img: "images/nachos1.jpg" },
+            { name: "Dim Sum", desc: "Chinese dim sum dumplings", price: 10, img: "images/dimsum1.jpg" },
+            { name: "Spring Rolls", desc: "Crispy spring rolls with veggies", price: 5, img: "images/springrolls1.jpg" },
+            { name: "Frittata", desc: "Egg frittata with spinach", price: 8, img: "images/frittata1.jpg" },
+            { name: "Tiramisu", desc: "Italian tiramisu dessert", price: 6, img: "images/tiramisu1.jpg" },
+            { name: "Cheesecake", desc: "Classic cheesecake with strawberries", price: 7, img: "images/cheesecake1.jpg" },
+            { name: "Macarons", desc: "French macarons in various flavors", price: 5, img: "images/macarons1.jpg" },
+            { name: "Baklava", desc: "Sweet baklava with honey", price: 4, img: "images/baklava1.jpg" },
+            // Continue in the same pattern...
+        ];
+
+        const container = document.getElementById("menu-container");
+
+        // Render food items dynamically
+        foodItems.forEach(item => {
+            const foodDiv = document.createElement("div");
+            foodDiv.className = "food-item";
+            foodDiv.innerHTML = `
+                <img src="${item.img}" alt="${item.name}">
+                <div class="food-item-content">
+                    <h2>${item.name}</h2>
+                    <p>${item.desc}</p>
+                    <div class="price">$${item.price}</div>
+                    <button onclick="addToCart(${item.price}, '${item.name}')">Add to Cart</button>
+                </div>
+            `;
+            container.appendChild(foodDiv);
+        });
+
+        // Add item to localStorage
+        function addToCart(price, name) {
+            const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+            cartItems.push({ name, price });
+            localStorage.setItem("cartItems", JSON.stringify(cartItems));
+            alert(`${name} added to cart!`);
+        }
+    </script>
+</body>
+</html>
