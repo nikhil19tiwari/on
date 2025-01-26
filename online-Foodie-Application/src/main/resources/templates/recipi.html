@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Recipes</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #ff5722;
+            margin-bottom: 30px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 50%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5722;
+            color: white;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #e64a19;
+        }
+
+        /* Recipes */
+        .recipe {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .recipe:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .recipe h2 {
+            margin: 0;
+            color: #ff5722;
+            font-size: 20px;
+        }
+        .recipe p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        /* "Not Found" Message */
+        .not-found {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        /* Pagination */
+        .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .pagination button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #ff5722;
+            color: white;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #e64a19;
+        }
+        .pagination button:disabled {
+            background-color: #ddd;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delicious Recipes</h1>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search Recipes..." />
+            <button onclick="filterRecipes()">Search</button>
+        </div>
+
+        <!-- Recipe List -->
+        <div id="recipe-list">
+            <!-- Recipes will be dynamically added here -->
+        </div>
+
+        <!-- "Not Found" Message -->
+        <div id="not-found" class="not-found" style="display: none;">Not Present Yet</div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button id="prev" onclick="prevPage()">Previous</button>
+            <button id="next" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        // Recipes Data (50 items)
+		const recipes = [
+		    { name: "Pizza", description: "Dough, sauce, cheese, bake at 200°C for 15 minutes." },
+		    { name: "Momos", description: "Dough, stuffed with vegetables or meat, steamed for 15 minutes." },
+		    { name: "Pasta", description: "Boil pasta, prepare creamy sauce, mix and serve hot." },
+		    { name: "Burger", description: "Grilled patty with cheese, lettuce, tomato, and sauce." },
+		    { name: "Salad", description: "Fresh veggies tossed with dressing and seasoning." },
+		    { name: "Grilled Chicken", description: "Marinate chicken, grill until golden brown." },
+		    { name: "Tacos", description: "Tortilla filled with meat, beans, cheese, and salsa." },
+		    { name: "Biryani", description: "Rice cooked with spices, meat, or vegetables." },
+		    { name: "Dosa", description: "Fermented rice batter cooked to make crispy crepes." },
+		    { name: "Sushi", description: "Rice, fish, and veggies rolled in nori seaweed." },
+		    { name: "Fried Rice", description: "Rice stir-fried with vegetables, soy sauce, and egg." },
+		    { name: "Chow Mein", description: "Stir-fried noodles with vegetables and sauce." },
+		    { name: "Ice Cream", description: "Cream, sugar, flavoring, churned and frozen." },
+		    { name: "Paneer Butter Masala", description: "Paneer in rich tomato butter gravy." },
+		    { name: "Spring Rolls", description: "Stuffed and fried thin rolls." },
+		    { name: "Samosa", description: "Spiced potato filling wrapped in dough and deep-fried." },
+		    { name: "Brownies", description: "Rich, chocolaty dessert baked until slightly fudgy." },
+		    { name: "Pancakes", description: "Fluffy batter cooked on a skillet and served with syrup." },
+		    { name: "Falafel", description: "Deep-fried balls of ground chickpeas and herbs." },
+		    { name: "Ramen", description: "Japanese noodle soup with broth, meat, and toppings." },
+		    { name: "Hummus", description: "Mashed chickpeas mixed with tahini, lemon, and garlic." },
+		    { name: "Nachos", description: "Corn chips topped with cheese, beans, and salsa." },
+		    { name: "Curry", description: "Spicy and flavorful sauce served with rice or bread." },
+		    { name: "Gulab Jamun", description: "Sweet fried dough soaked in sugar syrup." },
+		    { name: "Chicken Tikka", description: "Grilled chicken marinated with yogurt and spices." },
+		    { name: "Pav Bhaji", description: "Spicy mashed vegetables served with buttered bread rolls." },
+		    { name: "Lassi", description: "Sweet yogurt drink blended with spices or fruits." },
+		    { name: "Donuts", description: "Fried dough rings glazed with sugar or chocolate." },
+		    { name: "Omelette", description: "Beaten eggs cooked with veggies, cheese, or meats." },
+		    { name: "Cheesecake", description: "Creamy cheese-based dessert with a biscuit base." },
+		    { name: "Shawarma", description: "Thinly sliced meat served in pita with toppings." },
+		    { name: "Vada Pav", description: "Spicy potato fritters in a bread bun with chutneys." },
+		    { name: "Banana Bread", description: "Moist bread made with ripe bananas and nuts." },
+		    { name: "Meatballs", description: "Seasoned ground meat rolled into balls and cooked." },
+		    { name: "Tiramisu", description: "Coffee-flavored Italian dessert with mascarpone." },
+		    { name: "Mango Smoothie", description: "Blended mangoes with yogurt, milk, and sugar." },
+		    { name: "Pakoras", description: "Fried gram flour fritters with vegetables or meat." },
+		    { name: "Masala Tea", description: "Spiced tea brewed with milk and aromatic spices." },
+		    { name: "Hot Dogs", description: "Grilled sausages in a bun topped with ketchup or mustard." },
+		    { name: "Stuffed Paratha", description: "Indian flatbread stuffed with spiced fillings." },
+		    { name: "Crepes", description: "Thin pancakes filled with sweet or savory ingredients." },
+		    { name: "Raita", description: "Yogurt dip with vegetables and spices." },
+		    { name: "Kebabs", description: "Grilled skewers of seasoned meat or vegetables." },
+		    { name: "Apple Pie", description: "Pastry crust filled with spiced apples and baked." },
+		    { name: "Fritters", description: "Fried batter-coated vegetables or fruits." },
+		    { name: "Mac and Cheese", description: "Pasta in creamy cheese sauce, baked until golden." },
+		    { name: "Dim Sum", description: "Small Chinese dumplings served steamed or fried." },
+		    { name: "Fish Tacos", description: "Grilled fish in tortillas with slaw and sauces." },
+		    { name: "Quiche", description: "Savory pie with eggs, cheese, and vegetables or meat." },
+		    { name: "Tomato Soup", description: "Smooth, tangy soup made with fresh tomatoes." },
+		    { name: "Focaccia", description: "Italian bread topped with olive oil and herbs." },
+		    { name: "Garlic Bread", description: "Bread topped with garlic butter and baked until crisp." },
+		    { name: "Pho", description: "Vietnamese noodle soup with meat and aromatic herbs." },
+		    { name: "Pudding", description: "Creamy dessert made with milk, sugar, and flavoring." },
+		    { name: "Beignets", description: "Deep-fried pastry dusted with powdered sugar." },
+		    { name: "Chicken Wings", description: "Fried or baked wings tossed in flavorful sauces." },
+		    { name: "Smoothie Bowl", description: "Thick smoothie topped with fruits and nuts." },
+		    { name: "Gnocchi", description: "Italian potato dumplings served with sauces." },
+		    { name: "Enchiladas", description: "Corn tortillas rolled with filling and baked with sauce." },
+		    { name: "Waffles", description: "Crispy batter cooked in a waffle iron and topped with syrup." },
+		    { name: "Bruschetta", description: "Grilled bread topped with tomatoes, basil, and olive oil." },
+		    { name: "Minestrone", description: "Hearty Italian soup with vegetables and pasta." },
+		    { name: "Fajitas", description: "Sautéed meat and vegetables served with tortillas." },
+		    { name: "Rasgulla", description: "Indian sweet made of spongy balls in sugar syrup." },
+		    { name: "Pot Roast", description: "Slow-cooked meat with vegetables and broth." },
+		    { name: "Miso Soup", description: "Japanese soup made with miso, tofu, and seaweed." },
+		    { name: "Lasagna", description: "Layered pasta with sauce, cheese, and meat or veggies." },
+		    { name: "Croissant", description: "Flaky, buttery French pastry." },
+		    { name: "Ceviche", description: "Fresh fish marinated in lime juice with herbs." },
+		    { name: "Pancit", description: "Filipino stir-fried noodles with vegetables and meat." },
+		    { name: "Stuffed Bell Peppers", description: "Bell peppers filled with rice, meat, or veggies." },
+		    { name: "Cupcakes", description: "Mini cakes topped with frosting and decorations." },
+		    { name: "Clam Chowder", description: "Creamy soup with clams, potatoes, and celery." },
+		    { name: "Kheer", description: "Indian rice pudding flavored with cardamom." },
+		    { name: "Gazpacho", description: "Cold Spanish soup made with tomatoes and vegetables." },
+		    // Keep adding more items here
+		];
+
+
+        // Pagination and Search Logic
+        let currentPage = 1;
+        const recipesPerPage = 4;
+
+        function displayRecipes() {
+            const recipeList = document.getElementById('recipe-list');
+            const notFound = document.getElementById('not-found');
+            recipeList.innerHTML = ''; // Clear previous content
+
+            // Pagination Logic
+            const start = (currentPage - 1) * recipesPerPage;
+            const end = start + recipesPerPage;
+            const paginatedRecipes = recipes.slice(start, end);
+
+            // Check if recipes exist for current page
+            if (paginatedRecipes.length === 0) {
+                notFound.style.display = 'block';
+            } else {
+                notFound.style.display = 'none';
+                paginatedRecipes.forEach(recipe => {
+                    const recipeDiv = document.createElement('div');
+                    recipeDiv.className = 'recipe';
+                    recipeDiv.innerHTML = `
+                        <h2>${recipe.name}</h2>
+                        <p>${recipe.description}</p>
+                    `;
+                    recipeList.appendChild(recipeDiv);
+                });
+            }
+
+            // Update Pagination Buttons
+            document.getElementById('prev').disabled = currentPage === 1;
+            document.getElementById('next').disabled = currentPage >= Math.ceil(recipes.length / recipesPerPage);
+        }
+
+        function nextPage() {
+            if (currentPage < Math.ceil(recipes.length / recipesPerPage)) {
+                currentPage++;
+                displayRecipes();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayRecipes();
+            }
+        }
+
+        function filterRecipes() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const filteredRecipes = recipes.filter(recipe =>
+                recipe.name.toLowerCase().includes(searchValue)
+            );
+
+            // Show filtered recipes or display "Not Present Yet"
+            if (filteredRecipes.length === 0) {
+                document.getElementById('not-found').style.display = 'block';
+                document.getElementById('recipe-list').innerHTML = '';
+            } else {
+                document.getElementById('not-found').style.display = 'none';
+                currentPage = 1; // Reset to first page
+                recipes.splice(0, recipes.length, ...filteredRecipes); // Update recipes list
+                displayRecipes();
+            }
+        }
+
+        // Initialize the page with the first set of recipes
+        displayRecipes();
+    </script>
+</body>
+</html>

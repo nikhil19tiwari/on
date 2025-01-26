@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery - Online Service</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: rgb(192, 114, 153);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-start; /* Aligning content to the left */
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 2%;
+        }
+
+        .food-logo {
+            border-radius: 50%;
+            width: 5%;
+            height: 5%;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: gold;
+            text-decoration: none;
+            margin-left: 1rem; /* Slight space after the logo */
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            margin-left: auto; /* This ensures the navigation items go to the right */
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            background: #f8f8f8;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-text {
+            max-width: 50%;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background-color: #ff5733;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #e04c2b;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Carousel Styles */
+        .hero-image {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            overflow: hidden;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive Feature Cards */
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: #fff;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            max-width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* About Section */
+        .about {
+            background-color: #f8f8f8;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Media Queries for Small Screens */
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-text p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.2rem;
+            }
+
+            .food-logo {
+                width: 8%;
+                height: 8%;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .hero-image {
+                max-width: 100%;
+                margin-top: 1rem;
+            }
+
+            .feature-cards {
+                grid-template-columns: 1fr; /* Stacks cards vertically on mobile */
+            }
+
+            .card {
+                padding: 1.2rem;
+            }
+        }
+
+		#about {
+		      background-color: #f8f9fa; /* Light background for readability */
+		      padding: 40px 20px;
+		      text-align: center;
+		      border-radius: 10px;
+		      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		      margin: 30px 0;
+		  }
+
+		  #about h2 {
+		      font-size: 36px;
+		      color: #333;
+		      margin-bottom: 20px;
+		  }
+
+		  #about p {
+		      font-size: 18px;
+		      line-height: 1.6;
+		      color: #555;
+		      margin-bottom: 15px;
+		      max-width: 800px;
+		      margin-left: auto;
+		      margin-right: auto;
+		  }
+
+		  #about p:last-child {
+		      margin-bottom: 0;
+		  }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="/images/logo.png" alt="Fast Delivery" class="food-logo">
+        <h2><a href="#" class="logo" style="color: gold; text-decoration: none;">TastyBite</a></h2>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="/v1/api/user/adminDashboard">Admin</a></li>
+            <li><a href="/v1/api/user/signup">Signup</a></li>
+            <li><a href="/v1/api/user/contact">Contact</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <!-- Hero Section with Carousel -->
+        <section id="home" class="hero" style="background-color: rgb(251, 196, 191); margin-top: 1%; border-radius: 2%;">
+            <div class="hero-text">
+                <h1>Delicious Food Delivered to Your Doorstep</h1>
+                <p>Order from your favorite restaurants with just a click.</p>
+                <a href="#features" class="btn">Explore Now</a>
+            </div>
+
+            <div class="hero-image">
+                <!-- Carousel -->
+                <div class="carousel-images">
+                    <img src="/images/h.jpeg" alt="Delicious Food 1">
+                    <img src="/images/km.jpeg" alt="Delicious Food 2">
+                    <img src="/images/kn.jpeg" alt="Delicious Food 3">
+                    <img src="/images/ko.jpeg" alt="Delicious Food 4">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+		<section id="features" class="features" style="padding: 2rem; background-color: #f9f9f9;">
+		    <h2 style="text-align: center; font-size: 2.5rem; color: #333; margin-bottom: 1.5rem;">Our Features</h2>
+		    <div class="feature-cards" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;">
+				<div class="card" style="background-color: #c4db57; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+				    <img src="/images/fast.png" alt="Fast Delivery" style="width: 100px; margin-bottom: 1rem;">
+				    <h3 style="font-size: 1.5rem; color: #333;">Fast Delivery</h3>
+				    <p style="color: #555;">Get your food delivered in under 30 minutes.</p>
+				    <button onclick="openGoogleMaps()" style="padding: 0.5rem 1rem; border: none; border-radius: 8px; background-color: #4ab568; color: #fff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">
+				        Explore Food Items
+				    </button>
+				</div>
+		        <div class="card" style="background-color: #b554de; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+		            <img src="/images/w.jpg" alt="Wide Variety" style="width: 100px; margin-bottom: 1rem;">
+		            <h3 style="font-size: 1.5rem; color: #fff;">Wide Variety</h3>
+		            <p style="color: #fff;">Choose from a variety of cuisines and restaurants.</p>
+		            <button onclick="redirect()" style="padding: 0.5rem 1rem; border: none; border-radius: 8px; background-color: #4ab568; color: #fff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">
+		                Explore Food Items
+		            </button>
+		        </div>
+		        <div class="card" style="background-color: #d88f5a; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+		            <img src="/images/e.jpeg" alt="Easy Payment" style="width: 100px; margin-bottom: 1rem;">
+		            <h3 style="font-size: 1.5rem; color: #fff;">Easy Payment</h3>
+		            <p style="color: #fff;">Secure and convenient online payment options.</p>
+					<button onclick="payNow()" style="padding: 0.5rem 1rem; border: none; border-radius: 8px; background-color: #4ab568; color: #fff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">
+						                Explore Food Items
+						            </button>
+		        </div>
+		        <div class="card" style="background-color: #cc6687; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+		            <img src="/images/ff.jpg" alt="Fresh Ingredients" style="width: 100px; margin-bottom: 1rem;">
+		            <h3 style="font-size: 1.5rem; color: #fff;">Fresh Ingredients</h3>
+		            <p style="color: #fff;">We prioritize fresh and high-quality ingredients.</p>
+					<button onclick="recipi()" style="padding: 0.5rem 1rem; border: none; border-radius: 8px; background-color: #4ab568; color: #fff; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">
+						                Explore Food Items
+						            </button>
+		        </div>
+		    </div>
+		</section>
+
+        <!-- About Section -->
+		<!-- About Section -->
+		<section id="about" class="about">
+		    <h2>Welcome to Foodie</h2>
+		    <p>
+		        At Foodie, we believe that food is not just about eating, it’s an experience. From your favorite comfort foods to fine dining options, we bring the best culinary delights straight to your doorstep. 
+		    </p>
+		    <p>
+		        With a curated selection of top-rated restaurants, experienced chefs, and diverse cuisines, we promise to satisfy every craving—whether you're in the mood for a quick bite or an indulgent feast.
+		    </p>
+		    <p>
+		        Join us on a gastronomic journey where convenience meets quality. No matter where you are, we’re just a click away, ensuring fast, secure, and delightful deliveries. Let Foodie bring your cravings to life!
+		    </p>
+		</section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Foodie. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Basic JavaScript for Carousel functionality
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel-images img');
+        const totalImages = images.length;
+
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % totalImages;
+            document.querySelector('.carousel-images').style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        setInterval(changeImage, 2000); // Change image every 2 seconds
+		
+		function redirect(){
+			window.location.href='/v1/api/user/it';
+		}
+		function payNow(){
+					window.location.href='/v1/api/user/pay';
+				}
+				function recipi(){
+									window.location.href='/v1/api/user/recipi';
+								}
+								
+								function openGoogleMaps() {
+								      // Replace 'restaurants near me' with any query or location
+								      const query = encodeURIComponent("restaurants near me");
+								      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+								      window.open(googleMapsUrl, "_blank");
+								  }
+    </script>
+</body>
+
+</html>

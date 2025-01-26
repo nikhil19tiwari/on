@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            min-width: 800px; /* Increased from 600px to 800px */
+            background: #ffffff;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-form label {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .payment-form input {
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .payment-form input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        .payment-form button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-form button:hover {
+            background-color: #2980b9;
+        }
+
+        .generate-qr {
+            background-color: #e67e22;
+        }
+
+        .generate-qr:hover {
+            background-color: #d35400;
+        }
+
+        #qr-code {
+            margin-top: 30px;
+            text-align: center;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-canvas {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="padding-right: 6%;">Payment Information</h1>
+    <div class="container">
+        <!-- Form with POST action -->
+        <form class="payment-form" action="/v1/api/user/paymentProcess" method="POST">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            
+            <label for="mobile">Mobile Number</label>
+            <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+            
+            <label for="account-number">Account Number</label>
+            <input type="text" id="account-number" name="accountNumber" placeholder="Enter your account number" required>
+            
+            <label for="total-amount">Total Amount</label>
+            <input type="text" id="total-amount" name="amount" readonly value="$0.00">
+            
+            <button type="submit">Submit & Proceed</button>
+            <button type="button" class="generate-qr" onclick="generateQRCode()">Generate QR Code</button>
+        </form>
+
+        <div id="qr-code">
+            <h3>Scan to Pay</h3>
+            <img id="qr-image" src="/images/WhatsApp Image 2025-01-25 at 16.41.20_589d2981.jpg" alt="QR Code" width="200">
+        </div>
+    </div>
+
+    <script>
+        // Set total amount dynamically from localStorage
+        const totalAmount = JSON.parse(localStorage.getItem("cartItems"))?.reduce((total, item) => total + item.price, 0) || 0;
+        document.getElementById("total-amount").value = `$${totalAmount.toFixed(2)}`;
+
+        // Generate QR Code with form data
+        function generateQRCode() {
+            const username = document.getElementById("username").value;
+            const mobile = document.getElementById("mobile").value;
+            const accountNumber = document.getElementById("account-number").value;
+            const amount = totalAmount;
+
+            if (!username || !mobile || !accountNumber) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            const paymentDetails = `Username: ${username}\nMobile: ${mobile}\nAccount: ${accountNumber}\nAmount: $${amount}`;
+
+            // Display the local QR code (static QR) based on the form
+            const qrImage = document.getElementById("qr-image");
+            qrImage.src = "/images/WhatsApp Image 2025-01-25 at 16.41.20_589d2981.jpg"; // Replace with your local path
+
+            // Show the QR code image section
+            document.getElementById("qr-code").style.display = "block";
+        }
+    </script>
+</body>
+</html>
